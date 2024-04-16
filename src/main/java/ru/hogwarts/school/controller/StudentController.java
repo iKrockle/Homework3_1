@@ -40,7 +40,7 @@ public class StudentController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    @PostMapping("{id}/delete")
+    @DeleteMapping("{id}/delete")
     public ResponseEntity<Student> deleteStudent(@PathVariable Long id) {
         Student deletedStudent = studentService.del(id);
         if(deletedStudent == null) {

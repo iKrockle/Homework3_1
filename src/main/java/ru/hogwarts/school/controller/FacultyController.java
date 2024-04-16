@@ -40,7 +40,7 @@ public class FacultyController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    @PostMapping("{id}/delete")
+    @DeleteMapping("{id}/delete")
     public ResponseEntity<Faculty> deleteFaculty(@PathVariable Long id) {
         Faculty deletedFaculty = facultyService.del(id);
         if(deletedFaculty == null) {

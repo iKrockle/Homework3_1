@@ -4,60 +4,47 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.ItemAlreadyAddedException;
 import ru.hogwarts.school.exception.ItemNotFoundException;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.repository.FacultyRepository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Service
 public class FacultyServiceImpl implements FacultyService{
-    Map<Long, Faculty> mapFaculty= new HashMap<>();
-    private Long counter= 1L;
+    private final FacultyRepository facultyRepository;
+
+    public FacultyServiceImpl(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
     public Faculty add(Faculty faculty){
-        Set<Faculty> setFaculty = mapFaculty.values()
-                .stream()
-                .filter(v->v.getColor()==faculty.getColor()&&v.getName().equals(faculty.getName()))
-                .collect(Collectors.toSet());
-        if(!setFaculty.isEmpty()){
-            throw new ItemAlreadyAddedException("Такой факультет уже существует");
-        }
-        else{
-            faculty.setId(counter);
-            mapFaculty.put(counter,faculty);
-            counter++;
-            return faculty;
+        List<Faculty> facultyList = facultyRepository.findByNameAndColor(faculty.getName(),faculty.getColor());
+        if (facultyList.isEmpty()) {
+            return facultyRepository.save(faculty);
+        }else {
+            throw new ItemAlreadyAddedException();
         }
     }
 
     public Faculty find(Long id){
-        if(!mapFaculty.containsKey(id)){
-            throw new ItemNotFoundException("Факультет не найден");
-        }
-        else{
-            return mapFaculty.get(id);
-        }
+        return facultyRepository.findById(id).orElseThrow(ItemNotFoundException::new);
     }
 
-    public Faculty edit(Long id, Faculty faculty){
-        if(mapFaculty.containsValue(faculty)){
-            throw new ItemAlreadyAddedException("Такой факультет уже существует");
+    public Faculty edit(Faculty faculty){
+        List<Faculty> facultyList = facultyRepository.findByNameAndColor(faculty.getName(),faculty.getColor());
+        if (facultyList.isEmpty()) {
+            return facultyRepository.save(faculty);
+        }else {
+            throw new ItemAlreadyAddedException();
         }
-        mapFaculty.put(id,faculty);
-        return faculty;
     }
 
     public Faculty del(Long id){
-        Faculty delFaculty = find(id);
-        mapFaculty.remove(id);
-        return delFaculty;
+        Faculty faculty = find(id);
+        facultyRepository.deleteById(id);
+        return faculty;
     }
 
-    public Set<Faculty> getAllByColor(String color){
-        return mapFaculty.values()
-                    .stream()
-                    .filter(v-> v.getColor().equals(color))
-                    .collect(Collectors.toSet());
+    public List<Faculty> getAllByColor(String color){
+        return facultyRepository.findByColor(color);
     }
 }

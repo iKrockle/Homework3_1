@@ -4,61 +4,46 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.ItemAlreadyAddedException;
 import ru.hogwarts.school.exception.ItemNotFoundException;
 import ru.hogwarts.school.model.Student;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import ru.hogwarts.school.repository.StudentRepository;
+import java.util.List;
 
 @Service
 public class StudentServiceImpl implements  StudentService{
-    Map<Long, Student> mapStudent= new HashMap<>();
-    private Long counter= 1L;
+    private final StudentRepository studentRepository;
+
+    public StudentServiceImpl(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     public Student add(Student student){
-        Set<Student> setStudent = mapStudent.values()
-                                    .stream()
-                                    .filter(v->v.getAge()==student.getAge()&&v.getName().equals(student.getName()))
-                                    .collect(Collectors.toSet());
-        if(!setStudent.isEmpty()){
-            throw new ItemAlreadyAddedException("Такой студент уже существует");
-        }
-        else{
-            student.setId(counter);
-            mapStudent.put(counter,student);
-            counter++;
-            return student;
+        List<Student> facultyList = studentRepository.findByNameAndAge(student.getName(),student.getAge());
+        if (facultyList.isEmpty()) {
+            return studentRepository.save(student);
+        }else {
+            throw new ItemAlreadyAddedException();
         }
     }
 
     public Student find(Long id){
-        if(!mapStudent.containsKey(id)){
-            throw new ItemNotFoundException("Студент не найден");
-        }
-        else{
-            return mapStudent.get(id);
-        }
+        return studentRepository.findById(id).orElseThrow(ItemNotFoundException::new);
     }
 
-    public Student edit(Long id,Student student){
-        Student editStudent = find(id);
-        if(mapStudent.containsValue(student)){
-            throw new ItemAlreadyAddedException("Такой студент уже существует");
+    public Student edit(Student student){
+        List<Student> facultyList = studentRepository.findByNameAndAge(student.getName(),student.getAge());
+        if (facultyList.isEmpty()) {
+            return studentRepository.save(student);
+        }else {
+            throw new ItemAlreadyAddedException();
         }
-        mapStudent.put(id,editStudent);
-        return editStudent;
     }
 
     public Student del(Long id){
-        Student delStudent = find(id);
-        mapStudent.remove(id);
-        return delStudent;
+        Student student = find(id);
+        studentRepository.deleteById(id);
+        return student;
     }
 
-    public Set<Student> getAllByAge(Integer age){
-        return mapStudent.values()
-                .stream()
-                .filter(v-> v.getAge()==age)
-                .collect(Collectors.toSet());
+    public List<Student> getAllByAge(Integer age){
+        return studentRepository.findByAge(age);
     }
 }

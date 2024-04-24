@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.ItemAlreadyAddedException;
 import ru.hogwarts.school.exception.ItemNotFoundException;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.List;
@@ -46,5 +47,19 @@ public class FacultyServiceImpl implements FacultyService{
 
     public List<Faculty> getAllByColor(String color){
         return facultyRepository.findByColor(color);
+    }
+
+    public List<Faculty> getAllByNameOrColor(String name,String color){
+        List<Faculty> findList = facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(name,color);
+        if (findList.isEmpty()){
+            throw new ItemNotFoundException();
+        }
+        else{
+            return findList;
+        }
+    }
+
+    public List<Student> getAllStudentsOfFaculty(Long id){
+        return find(id).getStudentList();
     }
 }

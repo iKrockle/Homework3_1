@@ -12,11 +12,9 @@ import java.util.List;
 @Service
 public class FacultyServiceImpl implements FacultyService{
     private final FacultyRepository facultyRepository;
-    private final StudentService studentService;
 
-    public FacultyServiceImpl(FacultyRepository facultyRepository, StudentService studentService) {
+    public FacultyServiceImpl(FacultyRepository facultyRepository) {
         this.facultyRepository = facultyRepository;
-        this.studentService = studentService;
     }
 
     public Faculty add(Faculty faculty){
@@ -62,6 +60,6 @@ public class FacultyServiceImpl implements FacultyService{
     }
 
     public List<Student> getAllStudentsOfFaculty(Long id){
-        return studentService.getAllByFacultyId(find(id).getId());
+        return find(id).getStudentList();
     }
 }

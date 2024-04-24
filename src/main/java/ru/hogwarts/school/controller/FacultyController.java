@@ -68,8 +68,8 @@ public class FacultyController {
         return ResponseEntity.ok(facultyList);
     }
 
-    @GetMapping("{id}/get-by-faculty-id")
-    public ResponseEntity<List<Student>> getFacultyByColor(@PathVariable Long id) {
+    @GetMapping("{id}/get-students-by-faculty-id")
+    public ResponseEntity<List<Student>> getAllStudentsOfFaculty(@PathVariable Long id) {
         List<Student> studentList = facultyService.getAllStudentsOfFaculty(id);
         if(studentList == null) {
             return ResponseEntity.notFound() .build();

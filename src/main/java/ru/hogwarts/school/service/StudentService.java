@@ -13,5 +13,4 @@ public interface StudentService {
     List<Student> getAllByAge(Integer age);
     List<Student> findBetweenAge(Integer ageBeg,Integer ageEnd);
     Faculty findStudentFaculty(Long id);
-    List<Student> getAllByFacultyId(Long facultyId);
 }

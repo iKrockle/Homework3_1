@@ -1,6 +1,5 @@
 package ru.hogwarts.school.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -15,11 +14,19 @@ public class Student {
 
     @ManyToOne
     @JoinColumn(name = "faculty_id")
-    @JsonBackReference
+
     private Faculty faculty;
 
     public Student() {
     }
+
+    public Student(Long id, String name, int age, Faculty faculty) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.faculty = faculty;
+    }
+
 
     public int getAge() {
         return age;
@@ -64,5 +71,15 @@ public class Student {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, age);
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", faculty=" + faculty +
+                '}';
     }
 }

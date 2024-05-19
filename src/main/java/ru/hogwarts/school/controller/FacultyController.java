@@ -18,9 +18,9 @@ public class FacultyController {
     }
 
     @PostMapping("add")
-    public ResponseEntity<Faculty> addFaculty(@RequestBody Faculty student){
-        Faculty createdStudent = facultyService.add(student);
-        return ResponseEntity.ok(createdStudent);
+    public ResponseEntity<Faculty> addFaculty(@RequestBody Faculty faculty){
+        Faculty createdFaculty = facultyService.add(faculty);
+        return ResponseEntity.ok(createdFaculty);
     }
 
     @GetMapping("{id}/get")
@@ -33,12 +33,12 @@ public class FacultyController {
     }
 
     @PutMapping("update")
-    public ResponseEntity<Faculty> updateFaculty(@RequestBody Faculty user) {
-        Faculty updatedUser = facultyService.edit(user);
-        if(updatedUser == null) {
+    public ResponseEntity<Faculty> updateFaculty(@RequestBody Faculty faculty) {
+        Faculty updatedFaculty = facultyService.edit(faculty);
+        if(updatedFaculty == null) {
             return ResponseEntity.notFound() .build();
         }
-        return ResponseEntity.ok(updatedUser);
+        return ResponseEntity.ok(updatedFaculty);
     }
 
     @DeleteMapping("{id}/delete")
@@ -59,8 +59,8 @@ public class FacultyController {
         return ResponseEntity.ok(facultyList);
     }
 
-    @GetMapping("{color}/{name}/get-by-color-or-name")
-    public ResponseEntity<List<Faculty>> getFacultyByColor(@RequestParam(required = false)String color, @RequestParam(required = false)String name) {
+    @GetMapping("get-by-color-or-name")
+    public ResponseEntity<List<Faculty>> getFacultyByNameOrColor(@RequestParam(required = false)String color, @RequestParam(required = false)String name) {
         List<Faculty> facultyList = facultyService.getAllByNameOrColor(name,color);
         if(facultyList == null) {
             return ResponseEntity.notFound() .build();

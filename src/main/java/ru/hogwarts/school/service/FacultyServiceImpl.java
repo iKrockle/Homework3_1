@@ -6,6 +6,7 @@ import ru.hogwarts.school.exception.ItemNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
+import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.List;
 
@@ -13,8 +14,11 @@ import java.util.List;
 public class FacultyServiceImpl implements FacultyService{
     private final FacultyRepository facultyRepository;
 
-    public FacultyServiceImpl(FacultyRepository facultyRepository) {
+    private final StudentRepository studentRepository;
+
+    public FacultyServiceImpl(FacultyRepository facultyRepository, StudentRepository studentRepository) {
         this.facultyRepository = facultyRepository;
+        this.studentRepository = studentRepository;
     }
 
     public Faculty add(Faculty faculty){
@@ -60,6 +64,6 @@ public class FacultyServiceImpl implements FacultyService{
     }
 
     public List<Student> getAllStudentsOfFaculty(Long id){
-        return find(id).getStudentList();
+        return studentRepository.findByFaculty_Id(id);
     }
 }

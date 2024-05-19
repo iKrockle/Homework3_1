@@ -3,6 +3,8 @@ package ru.hogwarts.school.service;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.ItemAlreadyAddedException;
 import ru.hogwarts.school.exception.ItemNotFoundException;
+import ru.hogwarts.school.model.AvgAgeStudents;
+import ru.hogwarts.school.model.CountStudents;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
@@ -65,5 +67,17 @@ public class StudentServiceImpl implements  StudentService{
 
     public Faculty findStudentFaculty(Long id){
         return find(id).getFaculty();
+    }
+
+    public List<CountStudents> getStudentsCount(){
+        return  studentRepository.getCountStudents();
+    }
+
+    public List<AvgAgeStudents> getStudentsAvgAge(){
+        return  studentRepository.getAvgAgeStudents();
+    }
+
+    public List<Student> getLastFiveStudents(){
+        return  studentRepository.getLastFiveStudents();
     }
 }

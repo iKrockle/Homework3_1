@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service;
 
+import ru.hogwarts.school.model.AvgAgeStudents;
+import ru.hogwarts.school.model.CountStudents;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 
@@ -13,4 +15,7 @@ public interface StudentService {
     List<Student> getAllByAge(Integer age);
     List<Student> findBetweenAge(Integer ageBeg,Integer ageEnd);
     Faculty findStudentFaculty(Long id);
+    List<CountStudents> getStudentsCount();
+    List<AvgAgeStudents> getStudentsAvgAge();
+    List<Student> getLastFiveStudents();
 }

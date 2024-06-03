@@ -14,7 +14,7 @@
 	<name>school</name>
 	<description>Skypro HW 3_1</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -51,10 +51,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.liquibase</groupId>
-			<artifactId>liquibase-core</artifactId>
-		</dependency>
 	</dependencies>
 
 	<build>

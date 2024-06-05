@@ -22,6 +22,7 @@ import static ru.hogwarts.school.controller.TestConstants.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class FacultyControllerRESTTemplTest {
+
     @Autowired
     private TestRestTemplate testRestTemplate;
 
@@ -105,7 +106,7 @@ class FacultyControllerRESTTemplTest {
     @Test
     void getFacultyByColor() {
         createMockFaculty("Hogwarts","Red");
-        createMockFaculty("Slizerin","Green");
+        createMockFaculty("Slizerin","Yellow");
 
         ResponseEntity<List<Faculty>> newFacultyResp= testRestTemplate.exchange(
                 "http://localhost:"+port+"/faculty/Red/get-by-color",

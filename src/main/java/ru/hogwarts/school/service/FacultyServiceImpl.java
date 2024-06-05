@@ -92,6 +92,7 @@ public class FacultyServiceImpl implements FacultyService{
         logger.info("Was invoked method for get longest name");
         return getAll()
                 .stream()
+                .parallel()
                 .map(Faculty::getName)
                 .max(Comparator.comparingInt(String::length))
                 .orElseThrow(ItemNotFoundException::new);
@@ -99,8 +100,9 @@ public class FacultyServiceImpl implements FacultyService{
 
     public Integer formula(){
         logger.info("Was invoked method for get number");
-        return Stream.iterate(1, a -> a +1)
-                .limit(1_000_000)
+        //ортабатывает быстрее
+        return Stream
+                .iterate(1, a -> a<=1000000,a->a+1)
                 .reduce(0, (a, b) -> a + b );
     }
 }

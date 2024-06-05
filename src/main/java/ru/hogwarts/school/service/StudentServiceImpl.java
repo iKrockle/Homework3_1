@@ -88,6 +88,7 @@ public class StudentServiceImpl implements  StudentService{
         logger.info("Was invoked method for get student avg age");
         return Math.round(getAll()
                 .stream()
+                .parallel()
                 .mapToInt(Student::getAge)
                 .average()
                 .orElseThrow(ItemNotFoundException::new));
@@ -107,6 +108,7 @@ public class StudentServiceImpl implements  StudentService{
         logger.info("Was invoked method for get all students");
         return getAll()
                 .stream()
+                .parallel()
                 .map(Student::getName)
                 .map(String::toUpperCase)
                 .filter(upperCase -> upperCase.charAt(0) == 'А')

@@ -24,7 +24,7 @@ public class AvatarServiceImpl implements AvatarService{
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
 
-    Logger logger = LoggerFactory.getLogger(AvatarServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(AvatarServiceImpl.class);
 
     private final StudentRepository studentRepository;
     private final AvatarRepository avatarRepository;

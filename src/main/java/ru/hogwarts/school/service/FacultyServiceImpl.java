@@ -10,11 +10,13 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class FacultyServiceImpl implements FacultyService{
-    Logger logger = LoggerFactory.getLogger(FacultyServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(FacultyServiceImpl.class);
 
     private final FacultyRepository facultyRepository;
 
@@ -79,5 +81,26 @@ public class FacultyServiceImpl implements FacultyService{
     public List<Student> getAllStudentsOfFaculty(Long id){
         logger.info("Was invoked method for get students by faculty");
         return studentRepository.findByFaculty_Id(id);
+    }
+
+    public List<Faculty> getAll(){
+        logger.info("Was invoked method for get all students");
+        return facultyRepository.findAll();
+    }
+
+    public String longestName(){
+        logger.info("Was invoked method for get longest name");
+        return getAll()
+                .stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparingInt(String::length))
+                .orElseThrow(ItemNotFoundException::new);
+    }
+
+    public Integer formula(){
+        logger.info("Was invoked method for get number");
+        return Stream.iterate(1, a -> a +1)
+                .limit(1_000_000)
+                .reduce(0, (a, b) -> a + b );
     }
 }

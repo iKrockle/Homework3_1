@@ -5,17 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.ItemAlreadyAddedException;
 import ru.hogwarts.school.exception.ItemNotFoundException;
-import ru.hogwarts.school.model.AvgAgeStudents;
-import ru.hogwarts.school.model.CountStudents;
-import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.model.*;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 import java.util.List;
 
 @Service
 public class StudentServiceImpl implements  StudentService{
-    Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
     private final StudentRepository studentRepository;
     private final FacultyRepository facultyRepository;
 
@@ -87,13 +84,33 @@ public class StudentServiceImpl implements  StudentService{
         return  studentRepository.getCountStudents();
     }
 
-    public List<AvgAgeStudents> getStudentsAvgAge(){
+    public Long getStudentsAvgAge(){
         logger.info("Was invoked method for get student avg age");
-        return  studentRepository.getAvgAgeStudents();
+        return Math.round(getAll()
+                .stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElseThrow(ItemNotFoundException::new));
     }
 
     public List<Student> getLastFiveStudents(){
         logger.info("Was invoked method for get last 5 students");
         return  studentRepository.getLastFiveStudents();
+    }
+
+    public List<Student> getAll(){
+        logger.info("Was invoked method for get all students");
+        return studentRepository.findAll();
+    }
+
+    public List<String> getAllLetterA(){
+        logger.info("Was invoked method for get all students");
+        return getAll()
+                .stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter(upperCase -> upperCase.charAt(0) == 'А')
+                .sorted()
+                .toList();
     }
 }

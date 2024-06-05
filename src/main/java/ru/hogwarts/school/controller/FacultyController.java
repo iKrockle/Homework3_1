@@ -76,4 +76,22 @@ public class FacultyController {
         }
         return ResponseEntity.ok(studentList);
     }
+
+    @GetMapping("get-max-name-faculty")
+    public ResponseEntity<String> getMaxFacultyName() {
+        String name = facultyService.longestName();
+        if(name == null) {
+            return ResponseEntity.notFound() .build();
+        }
+        return ResponseEntity.ok(name);
+    }
+
+    @GetMapping("get-number-from-formula")
+    public ResponseEntity<Integer> getNumberFromFormula() {
+        Integer number = facultyService.formula();
+        if(number == null) {
+            return ResponseEntity.notFound() .build();
+        }
+        return ResponseEntity.ok(number);
+    }
 }

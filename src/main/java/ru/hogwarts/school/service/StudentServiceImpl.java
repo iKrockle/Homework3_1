@@ -115,4 +115,63 @@ public class StudentServiceImpl implements  StudentService{
                 .sorted()
                 .toList();
     }
+    private void printStudentName(Student student){
+        logger.info(student.getName());
+    }
+
+    private synchronized void printStudentNameSync(Student student){
+        logger.info(student.getName());
+    }
+
+    private void printNameInStream(List<Student> students){
+        new Thread(() -> {
+            students.forEach(this::printStudentName);
+        }).start();
+    }
+
+    private void printNameInStreamSync(List<Student> students){
+        new Thread(() -> {
+            students.forEach(this::printStudentNameSync);
+        }).start();
+    }
+
+    public List<String> getAllParallel(){
+        logger.info("Was invoked method for get all students parallel");
+        List<Student> students = getAll();
+
+        if(students.size()>=6){
+            students.subList(0,2).forEach(this::printStudentName);
+
+            for (int i=2;i<students.size();i+=2){
+                printNameInStream(students.subList(i,i+2));
+            }
+        }
+
+        return getAll()
+                .stream()
+                .parallel()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .toList();
+    }
+
+    public List<String> getAllSync(){
+        logger.info("Was invoked method for get all students parallel");
+        List<Student> students = getAll();
+
+        if(students.size()>=6){
+            students.subList(0,2).forEach(this::printStudentNameSync);
+
+            for (int i=2;i<students.size();i+=2){
+                printNameInStreamSync(students.subList(i,i+2));
+            }
+        }
+
+        return getAll()
+                .stream()
+                .parallel()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .toList();
+    }
 }

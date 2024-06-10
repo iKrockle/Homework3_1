@@ -2,7 +2,6 @@ package ru.hogwarts.school.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hogwarts.school.model.AvgAgeStudents;
 import ru.hogwarts.school.model.CountStudents;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
@@ -89,17 +88,26 @@ public class StudentController {
     }
 
     @GetMapping("get-avg-age")
-    public ResponseEntity<List<AvgAgeStudents>> getAvgAgeStudents() {
-        List<AvgAgeStudents> sudentList = studentService.getStudentsAvgAge();
+    public ResponseEntity<Long> getAvgAgeStudents() {
+        Long sudentAvgAge = studentService.getStudentsAvgAge();
+        if(sudentAvgAge == null) {
+            return ResponseEntity.notFound() .build();
+        }
+        return ResponseEntity.ok(sudentAvgAge);
+    }
+
+    @GetMapping("get-last-five")
+    public ResponseEntity<List<Student>> getLastFiveStudents() {
+        List<Student> sudentList = studentService.getLastFiveStudents();
         if(sudentList == null) {
             return ResponseEntity.notFound() .build();
         }
         return ResponseEntity.ok(sudentList);
     }
 
-    @GetMapping("get-last-five")
-    public ResponseEntity<List<Student>> getLastFiveStudents() {
-        List<Student> sudentList = studentService.getLastFiveStudents();
+    @GetMapping("get-all-first-a")
+    public ResponseEntity<List<String>> getAllStudentsLetterA() {
+        List<String> sudentList = studentService.getAllLetterA();
         if(sudentList == null) {
             return ResponseEntity.notFound() .build();
         }

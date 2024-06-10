@@ -18,4 +18,6 @@ public interface StudentService {
     Long getStudentsAvgAge();
     List<Student> getLastFiveStudents();
     List<String> getAllLetterA();
+    List<String> getAllParallel();
+    List<String> getAllSync();
 }

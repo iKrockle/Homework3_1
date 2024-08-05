@@ -113,4 +113,22 @@ public class StudentController {
         }
         return ResponseEntity.ok(sudentList);
     }
+
+    @GetMapping("print-parallel")
+    public ResponseEntity<List<String>> getAllStudentsNameParallel() {
+        List<String> sudentList = studentService.getAllParallel();
+        if(sudentList == null) {
+            return ResponseEntity.notFound() .build();
+        }
+        return ResponseEntity.ok(sudentList);
+    }
+
+    @GetMapping("print-sync")
+    public ResponseEntity<List<String>> getAllStudentsNameSync() {
+        List<String> sudentList = studentService.getAllSync();
+        if(sudentList == null) {
+            return ResponseEntity.notFound() .build();
+        }
+        return ResponseEntity.ok(sudentList);
+    }
 }
